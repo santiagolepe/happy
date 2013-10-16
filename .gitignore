@@ -1,0 +1,11 @@
+*~
+.DS_Store
+*.DS_Store
+*/.DS_Store
+uploads/
+/nbproject/**
+.idea/*
+
+config/*
+node_modules/*
+.DS_Store
