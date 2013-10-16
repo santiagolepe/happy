@@ -1,0 +1,14 @@
+{
+  "name": "happy",
+  "version": "0.0.1",
+  "description": "hapi test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Octavio",
+  "license": "MIT",
+  "dependencies": {
+    "hapi": "~1.14.0"
+  }
+}
