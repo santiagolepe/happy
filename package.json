@@ -9,6 +9,10 @@
   "author": "Octavio",
   "license": "MIT",
   "dependencies": {
-    "hapi": "~1.14.0"
+    "hapi": "~1.14.0",
+    "mongodb": "*",
+    "mongoose": "*",
+    "mongoose-validate": "*",
+    "bcrypt": "*"
   }
 }
