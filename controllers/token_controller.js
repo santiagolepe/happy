@@ -23,7 +23,7 @@ module.exports = {
         usr.save(function(err, usr2){
           if(err){ return req.reply(err); }
 
-          req.reply(usr2.token);
+          req.reply(usr2.token).code(201);
         });
       });
     });
