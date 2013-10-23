@@ -9,7 +9,7 @@ module.exports = {
       token: req.pre.user.pivotal_token
     };
 
-    pivotal.projects(options, function(err, projects){
+    pivotal.api(options, function(err, projects){
       if(err){ return req.reply(err); }
       req.reply(projects);
     });
