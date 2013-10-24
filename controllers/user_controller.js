@@ -11,45 +11,25 @@ module.exports = {
       last_name:     data.last_name,
       harvest_email: data.harvest_email,
       harvest_pwd:   data.harvest_pwd,
+      harvest_app:   data.harvest_app,
       pivotal_token: data.pivotal_token,
       password:      data.password
     });
 
+    //create the unique token for this user
     user.createToken(function(){
+      //encrypt her password
       user.encryptPass(function(){
       
         user.save(function(err, usr){
           if(err) return req.reply(err);
           req.reply(usr.token).code(201);
         });
-
       });
     });
   },
 
-  findByEmail: function(req){
-    if(req.pre.user.type !== 'admin'){ return req.reply('need to be an administrator').code(401); }
-
-    var email = req.params.email;
-
-    User.find({email: email}, function(err, usr){
-      if(err){ return req.reply(err); }
-      req.reply(usr).code(200);
-    });
-  },
-
-  delete: function(req){
-    if(req.pre.user.type !== 'admin'){ return req.reply('need to be an administrator').code(401); }
-
-    var email = req.params.email;
-
-    User.findOneAndRemove({email: email}, function(err, res){
-      if(err){ return req.reply(err); }
-
-      req.reply(email).code(200);
-    });
-  },
-
+  //update user 
   update: function(req){
     var data   = req.payload;
     var email  = req.pre.user.email;
@@ -65,6 +45,7 @@ module.exports = {
       usr.harvest_pwd  = data.harvest_pwd;
       usr.password     = data.password;
       usr.pivotal_token= data.pivotal_token;
+      usr.harvest_app  = data.harvest_app
   
       usr.encryptPass(function(){
         usr.save(function(err){

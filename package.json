@@ -13,6 +13,7 @@
     "mongodb": "*",
     "mongoose": "*",
     "mongoose-validate": "*",
-    "bcrypt": "*"
+    "bcrypt": "*",
+    "xml2js": "*"
   }
 }

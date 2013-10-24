@@ -11,6 +11,7 @@ var userSchema = new Schema({
     token:        {type: 'String'},
     harvest_email:{type: 'String', required: true, validate: [validate.email, 'invalid email address']},
     harvest_pwd:  {type: 'String', required: true},
+    harvest_app:  {type: 'String', required: true},
     pivotal_token:{type: 'String', required: true},
     password:     {type: 'String', required: true, match:/^.{8,200}$/},
     type:         {type: 'String', default: "free"},
