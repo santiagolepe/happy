@@ -4,20 +4,19 @@ var opts  = require('../config/settings').pivotal;
 module.exports = {
 
   api: function(options, cb){
-    opts.path                      = options.path;
+    opts.path = options.path;
     opts.headers['X-TrackerToken'] = options.token;
-    opts.method                    = options.method;
+    opts.method = options.method;
 
     //if send PUT or POST - send a body
     if(options.body){
       var body = JSON.stringify(options.body);
-      opts.headers['Content-Length'] = body.length;
+      opts.headers['Content-Length'] = Buffer.byteLength(body);
     }
      
     var req = https.request(opts, function(res){
-
       res.on('data', function(data){
-        cb(null, data.toString());
+        cb(null, JSON.parse(data));
       });
     });
 
