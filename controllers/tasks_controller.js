@@ -1,37 +1,75 @@
-var pivotal = require('../services/pivotalApi');
+var pivotal = require('../lib/pivotal/tasks');
+var harvest = require('../lib/harvest/timers');
 
 module.exports = {
 
+  //get all task, in unstarted, reject, started
   getAll: function(req){
-    var project_id = req.params.project_id;
-    var options    = {
-      path:  '/services/v5/projects/'+project_id+'/stories?filter=state:started,unstarted,rejected',
-      token: req.pre.user.pivotal_token
+    var data = {
+      params: req.params,
+      user: req.pre.user
     };
 
-    pivotal.api(options, function(err, tasks){
+    pivotal.getAll(data, function(err, tasks){
       if(err){ return req.reply(err); }
+
       req.reply(tasks);
     });
   },
 
   start: function(req){
-    var project_id = req.params.project_id;
-    var task_id    = req.params.task_id;
-    var options    = {
-      path:   '/services/v5/projects/'+project_id+'/stories/'+task_id,
-      token:  req.pre.user.pivotal_token,
-      method: 'PUT',
-      body:   {'current_state': 'started'}
-    }
+    var data = {
+      params: req.params,
+      user: req.pre.user,
+      payload: req.payload //get object {harvest_project_id: x, harvest_task_id}
+    };
 
-    //start the task
-    pivotal.api(options, function(err, task){
+    //start the task in pivotal
+    pivotal.start(data, function(err, task){
       if(err){return req.reply(err); }
 
-      req.reply(task).code(201);
+      //start the timer in harvest for today
+      data.pivotal = task;
+      harvest.create(data, function(err, timer){
+        if(err){ return req.reply(err); }
+        console.log(timer);
+        return req.reply(task);
+      });
     });
-  
-  }
+  },
 
+  stop: function(req){
+    var data = {
+      params: req.params,
+      user: req.pre.user,
+      payload: req.payload //get object {harvest_timer_id}
+    };
+
+    //stop the timer in harvest
+    harvest.stop(data, function(err, timer){
+      if(err){ return req.reply(err); }
+
+      req.reply(timer);
+    });
+  },
+
+  
+  finish: function(req){
+    var data = {
+      params: req.params,
+      user: req.pre.user,
+      payload: req.payload //get object {harvest_timer_id}
+    };
+
+    //finish the task in harvest, became to deliver
+    pivotal.finish(data, function(err, task){
+      if(err){ return req.reply(err); }
+
+        harvest.stop(data, function(err, timer){
+          if(err) {return req.reply(err); }
+          
+          req.reply(task);
+        });
+    });
+  },
 }
