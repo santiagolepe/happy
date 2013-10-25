@@ -15,14 +15,13 @@ module.exports = {
       pivotal_token: data.pivotal_token,
       password:      data.password
     });
-
     //create the unique token for this user
     user.createToken(function(){
       //encrypt her password
       user.encryptPass(function(){
       
         user.save(function(err, usr){
-          if(err) return req.reply(err);
+          if(err) return req.reply(JSON.stringify(err)).code(400);
           req.reply(usr.token).code(201);
         });
       });
@@ -49,7 +48,7 @@ module.exports = {
   
       usr.encryptPass(function(){
         usr.save(function(err){
-          if(err){return req.reply(err); }
+          if(err){return req.reply(JSON.stringify(err)).code(400); }
           req.reply('success').code(201);
         });
       });
