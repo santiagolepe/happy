@@ -38,7 +38,7 @@ module.exports = [
   {method: 'PUT', path: '/v1/user', config: {pre: pre, handler: userController.update.bind(userController)}},
 
   //Restful to tokens
-  {method: 'GET', path: '/v1/token', config: {handler: tokenController.getToken.bind(tokenController), auth: {strategies: ['basic']}}},
+  {method: 'POST', path: '/v1/token', config: {handler: tokenController.getToken.bind(tokenController)}},
   {method: 'GET', path: '/v1/token/renew', config: {pre: pre, handler: tokenController.renew.bind(tokenController)}},
 
   //Restful to projects
